@@ -23,6 +23,12 @@ RUN npm install -g bower
 # Install Grunt CLI
 RUN npm install -g grunt-cli
 
+# Install Python/ Pip
+RUN apt-get install -y python-pip
+
+# Install AWS CLI
+RUN pip install awscli --ignore-installed six
+
 # Set language
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
