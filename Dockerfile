@@ -1,18 +1,31 @@
-FROM kdvolder/mvn-plus-npm
-
+FROM ubuntu:16.04
 MAINTAINER Serfim TIC
+
+# Base MVN / NPM
+RUN apt update && apt install -y \
+  locales \
+  build-essential \
+  git \
+  openjdk-8-jdk \
+  maven \
+  curl 
+
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+  && apt install -y nodejs
+
+CMD /bin/bash 
 
 # Get Chrome sources
 RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
 # Install Chrome
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     google-chrome-stable \
     --no-install-recommends
 
 # Install Ruby
-RUN apt-get install -y ruby ruby-dev
+RUN apt install -y ruby ruby-dev
 
 # Install Compass
 RUN gem install compass
@@ -24,10 +37,13 @@ RUN npm install -g bower
 RUN npm install -g grunt-cli
 
 # Install Python/ Pip
-RUN apt-get install -y python-pip
+RUN apt install -y python-pip
 
 # Install AWS CLI
 RUN pip install awscli --ignore-installed six
+
+# Install SSHPASS
+RUN apt install sshpass
 
 # Set language
 RUN locale-gen en_US.UTF-8
